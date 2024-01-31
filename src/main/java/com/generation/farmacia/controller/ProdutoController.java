@@ -39,12 +39,12 @@ public class ProdutoController {
     }
 
 
-    @GetMapping("/titulo/{titulo}")
-    public ResponseEntity<List<Produto>> getByTitulo(@PathVariable String titulo) {
-        return ResponseEntity.ok(produtoRepository.findAllByTituloContainingIgnoreCase(titulo));
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
+        return ResponseEntity.ok(produtoRepository.findAllByNomeContainingIgnoreCase(nome));
     }
 
-    @PostMapping
+    @PostMapping("/cadastrar")
     public ResponseEntity<Produto> post(@Valid @RequestBody Produto postagem) {
         if (categoriaRepository.existsById(postagem.getCategoria().getId()))
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -54,13 +54,13 @@ public class ProdutoController {
 
     }
 
-    @PutMapping
+    @PutMapping("/atualizar")
     public ResponseEntity<Produto> put(@Valid @RequestBody Produto produto) {
         if (produtoRepository.existsById(produto.getId())) {
             if (categoriaRepository.existsById(produto.getCategoria().getId()))
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(produtoRepository.save(produto));
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Tema não existe!", null);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe!", null);
 
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
